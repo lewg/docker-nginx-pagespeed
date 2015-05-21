@@ -1,0 +1,4 @@
+build:
+  build: build_deb/.
+  volumes:
+      - packages:/packages
