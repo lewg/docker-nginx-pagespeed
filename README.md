@@ -6,7 +6,7 @@ An nginx container mimicking the [official nginx box](https://registry.hub.docke
 Versions
 --------
 
--	**Nginx**: 1.9.4-1~jessie
+-	**Nginx**: 1.9.5-1~jessie
 -	**NPS**: 1.9.32.6
 
 Building the .deb package

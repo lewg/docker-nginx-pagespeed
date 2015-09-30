@@ -7,8 +7,8 @@ RUN echo "deb-src http://nginx.org/packages/mainline/debian/ jessie nginx" >> /e
 
 WORKDIR /tmp
 
-ENV NGINX_BASE_VERSION 1.9.4
-ENV NGINX_VERSION 1.9.4-1~jessie
+ENV NGINX_BASE_VERSION 1.9.5
+ENV NGINX_VERSION 1.9.5-1~jessie
 
 RUN apt-get update && \
     apt-get install -y wget ca-certificates build-essential zlib1g-dev libpcre3 libpcre3-dev unzip debhelper libssl-dev && \
