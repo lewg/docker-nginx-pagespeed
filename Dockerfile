@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ENV NGINX_VERSION 1.9.6-1~jessie
+ENV NGINX_VERSION 1.9.9-1~jessie
 
 ADD packages/nginx_${NGINX_VERSION}_amd64.deb /tmp/nginx.deb
 
