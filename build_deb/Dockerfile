@@ -1,28 +1,33 @@
-FROM debian:jessie
+FROM debian:stretch
 
-RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
-RUN echo "deb-src http://nginx.org/packages/mainline/debian/ jessie nginx" >> /etc/apt/sources.list
+RUN apt-get update && \
+    apt-get install -y wget gnupg2 \
+      build-essential zlib1g-dev libpcre3 libpcre3-dev unzip uuid-dev
+    #   wget libgd2-xpm-dev libgeoip-dev libperl-dev libxslt1-dev lsb-release ca-certificates debhelper libssl-dev
+RUN apt-key adv --no-tty  --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
+RUN echo "deb-src http://nginx.org/packages/mainline/debian/ stretch nginx" >> /etc/apt/sources.list
 
 WORKDIR /tmp
 
-ENV NGINX_BASE_VERSION 1.9.14
-ENV NGINX_VERSION 1.9.14-1~jessie
+ENV NGINX_BASE_VERSION 1.15.8
+ENV NGINX_VERSION "1.15.8-1~stretch"
 
 RUN apt-get update && \
-    apt-get install -y wget libgd2-xpm-dev libgeoip-dev libperl-dev libxslt1-dev lsb-release ca-certificates build-essential zlib1g-dev libpcre3 libpcre3-dev unzip debhelper libssl-dev && \
+    apt-get build-dep -y nginx && \
     apt-get source nginx=${NGINX_VERSION}
 
-ENV NPS_VERSION=1.11.33.0
+ENV NPS_VERSION=1.13.35.2
+ENV NPS_DIR incubator-pagespeed-ngx-${NPS_VERSION}-stable
+RUN wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}-stable.zip
 
-RUN wget https://github.com/pagespeed/ngx_pagespeed/archive/release-${NPS_VERSION}-beta.zip
-RUN wget https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz
+RUN unzip v${NPS_VERSION}-stable.zip && \
+    cd "$NPS_DIR" && \
+    psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz && \
+    [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL) && \
+    wget ${psol_url} && \
+    tar -xzvf $(basename ${psol_url})
 
-RUN unzip release-${NPS_VERSION}-beta.zip && \
-    tar -xzvf ${NPS_VERSION}.tar.gz && \
-    cp -r psol ngx_pagespeed-release-${NPS_VERSION}-beta/
-
-
-RUN sed -i 's/--with-ipv6/--with-ipv6 --add-module=\/tmp\/ngx_pagespeed-release-${NPS_VERSION}-beta/g' /tmp/nginx-${NGINX_BASE_VERSION}/debian/rules && \
+RUN sed -i 's/--with-stream_ssl_preread_module/--with-stream_ssl_preread_module --add-module=\/tmp\/incubator-pagespeed-ngx-${NPS_VERSION}-stable/g' /tmp/nginx-${NGINX_BASE_VERSION}/debian/rules && \
     cd /tmp/nginx-${NGINX_BASE_VERSION} && dpkg-buildpackage -uc -b
 
 VOLUME ["/packages"]

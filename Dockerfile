@@ -1,6 +1,6 @@
-FROM debian:jessie
+FROM debian:stretch
 
-ENV NGINX_VERSION 1.9.14-1~jessie
+ENV NGINX_VERSION 1.15.8-1~stretch
 
 ADD packages/nginx_${NGINX_VERSION}_amd64.deb /tmp/nginx.deb
 
