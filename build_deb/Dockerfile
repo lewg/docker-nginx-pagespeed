@@ -2,15 +2,15 @@ FROM debian:stretch
 
 RUN apt-get update && \
     apt-get install -y wget gnupg2 \
-      build-essential zlib1g-dev libpcre3 libpcre3-dev unzip uuid-dev
-    #   wget libgd2-xpm-dev libgeoip-dev libperl-dev libxslt1-dev lsb-release ca-certificates debhelper libssl-dev
+    build-essential zlib1g-dev libpcre3 libpcre3-dev unzip uuid-dev
+#   wget libgd2-xpm-dev libgeoip-dev libperl-dev libxslt1-dev lsb-release ca-certificates debhelper libssl-dev
 RUN apt-key adv --no-tty  --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62
 RUN echo "deb-src http://nginx.org/packages/mainline/debian/ stretch nginx" >> /etc/apt/sources.list
 
 WORKDIR /tmp
 
-ENV NGINX_BASE_VERSION 1.15.8
-ENV NGINX_VERSION "1.15.8-1~stretch"
+ENV NGINX_BASE_VERSION 1.17.9
+ENV NGINX_VERSION "1.17.9-1~stretch"
 
 RUN apt-get update && \
     apt-get build-dep -y nginx && \
