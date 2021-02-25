@@ -9,14 +9,4 @@ Versions
 -	**Nginx**: 1.19.6-1~stretch
 -	**NPS**: 1.13.35.2
 
-Building the .deb package
--------------------------
 
-If you want to rebuild the package files:
-
-```
-% docker-compose -f docker-build.yml build
-% docker-compose -f docker-build.yml run build
-```
-
-Then, the new packages should be in `/packages` folder.
